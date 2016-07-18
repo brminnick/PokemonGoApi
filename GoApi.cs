@@ -77,17 +77,5 @@ namespace PokemonGoApi
 
             return messageParser.ParseFrom(responseEnvelop.Payload[0].Data.ToByteArray());
         }
-        public Proto.FortDetailsProto getFortDetails()
-        {
-            Proto.RequestEnvelop requestEnvelop = new Proto.RequestEnvelop();
-            requestEnvelop.Requests.Add(new Proto.Request() { Type = Proto.Method.FortDetails });
-
-            Proto.ResponseEnvelop responseEnvelop = apiRequest(m_apiEndPoint, requestEnvelop);
-            Google.Protobuf.MessageParser<Proto.FortDetailsProto> messageParser = new Google.Protobuf.MessageParser<Proto.FortDetailsProto>(() => { return new Proto.FortDetailsProto(); });
-
-            Console.WriteLine(responseEnvelop.Payload.ToString());
-
-            return messageParser.ParseFrom(responseEnvelop.Payload[0].Data.ToByteArray());
-        }
     }
 }
