@@ -44,4 +44,4 @@ After installing the references it's easy as add the .cs files to the project an
 This project it's possible due the work from another people.
  * [/r/pokemongodev](https://www.reddit.com/r/pokemongodev)
  * [tejado](https://github.com/tejado/pokemongo-api-demo) (Pokémon Club login)
- * [Grover-c13](https://github.com/Grover-c13/PokeGOAPI-Java/) (Stolen .proto files)
+ * [Grover-c13](https://github.com/Grover-c13/PokeGOAPI-Java/) (Taken .proto files)
