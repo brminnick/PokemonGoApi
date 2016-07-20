@@ -86,5 +86,34 @@ namespace PokemonGoApi
 
             return messageParser.ParseFrom(responseEnvelop.Payload[0].Data.ToByteArray());
         }
+        public InventoryResponseProto getInventory()
+        {
+            var requestEnvelop = new RequestEnvelop();
+            requestEnvelop.Requests.Add(new Request() { Type = Method.GetInventory });
+
+            var responseEnvelop = apiRequest(m_apiEndPoint, requestEnvelop);
+            var messageParser = new MessageParser<InventoryResponseProto>(() => { return new InventoryResponseProto(); });
+
+            return messageParser.ParseFrom(responseEnvelop.Payload[0].Data.ToByteArray());
+        }
+        public GetMapObjectsOutProto getMapObjects()
+        {
+            var requestMapObjects = new GetMapObjectsProto()
+            {
+                CellId = ByteString.CopyFrom(S2Helper.GetNearbyCellIds(m_coordLongitude, m_coordLatitude)),
+                SinceTimeMs = ByteString.CopyFromUtf8("\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"),
+                PlayerLat = m_coordLatitude,
+                PlayerLng = m_coordLongitude,
+                
+            };
+            var requestEnvelop = new RequestEnvelop();
+            requestEnvelop.Requests.Add(new Request() { Type = Method.GetMapObjects, Data = requestMapObjects.ToByteString() });
+
+
+            var responseEnvelop = apiRequest(m_apiEndPoint, requestEnvelop);
+            var messageParser = new MessageParser<GetMapObjectsOutProto>(() => { return new GetMapObjectsOutProto(); });
+
+            return messageParser.ParseFrom(responseEnvelop.Payload[0].Data.ToByteArray());
+        }
     }
 }

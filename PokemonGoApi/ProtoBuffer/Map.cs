@@ -24,8 +24,8 @@ namespace PokemonGoApi.Proto {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CgltYXAucHJvdG8SElBva2Vtb25Hb0FwaS5Qcm90bxoPaW52ZW50b3J5LnBy",
-            "b3RvIl8KEkdldE1hcE9iamVjdHNQcm90bxIOCgZDZWxsSWQYASADKAQSEwoL",
-            "U2luY2VUaW1lTXMYAiADKAMSEQoJUGxheWVyTGF0GAMgASgBEhEKCVBsYXll",
+            "b3RvIl8KEkdldE1hcE9iamVjdHNQcm90bxIOCgZDZWxsSWQYASABKAwSEwoL",
+            "U2luY2VUaW1lTXMYAiABKAwSEQoJUGxheWVyTGF0GAMgASgBEhEKCVBsYXll",
             "ckxuZxgEIAEoASKRAQoVR2V0TWFwT2JqZWN0c091dFByb3RvEjcKB01hcENl",
             "bGwYASADKAsyJi5Qb2tlbW9uR29BcGkuUHJvdG8uQ2xpZW50TWFwQ2VsbFBy",
             "b3RvEj8KBlN0YXR1cxgCIAEoDjIvLlBva2Vtb25Hb0FwaS5Qcm90by5HZXRN",
@@ -357,8 +357,8 @@ namespace PokemonGoApi.Proto {
     partial void OnConstruction();
 
     public GetMapObjectsProto(GetMapObjectsProto other) : this() {
-      cellId_ = other.cellId_.Clone();
-      sinceTimeMs_ = other.sinceTimeMs_.Clone();
+      cellId_ = other.cellId_;
+      sinceTimeMs_ = other.sinceTimeMs_;
       playerLat_ = other.playerLat_;
       playerLng_ = other.playerLng_;
     }
@@ -369,20 +369,25 @@ namespace PokemonGoApi.Proto {
 
     /// <summary>Field number for the "CellId" field.</summary>
     public const int CellIdFieldNumber = 1;
-    private static readonly pb::FieldCodec<ulong> _repeated_cellId_codec
-        = pb::FieldCodec.ForUInt64(10);
-    private readonly pbc::RepeatedField<ulong> cellId_ = new pbc::RepeatedField<ulong>();
-    public pbc::RepeatedField<ulong> CellId {
+    private pb::ByteString cellId_ = pb::ByteString.Empty;
+    /// <summary>
+    ///  Workaround to get rid of double uint64/int64 readonly mode
+    /// </summary>
+    public pb::ByteString CellId {
       get { return cellId_; }
+      set {
+        cellId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
     }
 
     /// <summary>Field number for the "SinceTimeMs" field.</summary>
     public const int SinceTimeMsFieldNumber = 2;
-    private static readonly pb::FieldCodec<long> _repeated_sinceTimeMs_codec
-        = pb::FieldCodec.ForInt64(18);
-    private readonly pbc::RepeatedField<long> sinceTimeMs_ = new pbc::RepeatedField<long>();
-    public pbc::RepeatedField<long> SinceTimeMs {
+    private pb::ByteString sinceTimeMs_ = pb::ByteString.Empty;
+    public pb::ByteString SinceTimeMs {
       get { return sinceTimeMs_; }
+      set {
+        sinceTimeMs_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
     }
 
     /// <summary>Field number for the "PlayerLat" field.</summary>
@@ -416,8 +421,8 @@ namespace PokemonGoApi.Proto {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if(!cellId_.Equals(other.cellId_)) return false;
-      if(!sinceTimeMs_.Equals(other.sinceTimeMs_)) return false;
+      if (CellId != other.CellId) return false;
+      if (SinceTimeMs != other.SinceTimeMs) return false;
       if (PlayerLat != other.PlayerLat) return false;
       if (PlayerLng != other.PlayerLng) return false;
       return true;
@@ -425,8 +430,8 @@ namespace PokemonGoApi.Proto {
 
     public override int GetHashCode() {
       int hash = 1;
-      hash ^= cellId_.GetHashCode();
-      hash ^= sinceTimeMs_.GetHashCode();
+      if (CellId.Length != 0) hash ^= CellId.GetHashCode();
+      if (SinceTimeMs.Length != 0) hash ^= SinceTimeMs.GetHashCode();
       if (PlayerLat != 0D) hash ^= PlayerLat.GetHashCode();
       if (PlayerLng != 0D) hash ^= PlayerLng.GetHashCode();
       return hash;
@@ -437,8 +442,14 @@ namespace PokemonGoApi.Proto {
     }
 
     public void WriteTo(pb::CodedOutputStream output) {
-      cellId_.WriteTo(output, _repeated_cellId_codec);
-      sinceTimeMs_.WriteTo(output, _repeated_sinceTimeMs_codec);
+      if (CellId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteBytes(CellId);
+      }
+      if (SinceTimeMs.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteBytes(SinceTimeMs);
+      }
       if (PlayerLat != 0D) {
         output.WriteRawTag(25);
         output.WriteDouble(PlayerLat);
@@ -451,8 +462,12 @@ namespace PokemonGoApi.Proto {
 
     public int CalculateSize() {
       int size = 0;
-      size += cellId_.CalculateSize(_repeated_cellId_codec);
-      size += sinceTimeMs_.CalculateSize(_repeated_sinceTimeMs_codec);
+      if (CellId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeBytesSize(CellId);
+      }
+      if (SinceTimeMs.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeBytesSize(SinceTimeMs);
+      }
       if (PlayerLat != 0D) {
         size += 1 + 8;
       }
@@ -466,8 +481,12 @@ namespace PokemonGoApi.Proto {
       if (other == null) {
         return;
       }
-      cellId_.Add(other.cellId_);
-      sinceTimeMs_.Add(other.sinceTimeMs_);
+      if (other.CellId.Length != 0) {
+        CellId = other.CellId;
+      }
+      if (other.SinceTimeMs.Length != 0) {
+        SinceTimeMs = other.SinceTimeMs;
+      }
       if (other.PlayerLat != 0D) {
         PlayerLat = other.PlayerLat;
       }
@@ -483,14 +502,12 @@ namespace PokemonGoApi.Proto {
           default:
             input.SkipLastField();
             break;
-          case 10:
-          case 8: {
-            cellId_.AddEntriesFrom(input, _repeated_cellId_codec);
+          case 10: {
+            CellId = input.ReadBytes();
             break;
           }
-          case 18:
-          case 16: {
-            sinceTimeMs_.AddEntriesFrom(input, _repeated_sinceTimeMs_codec);
+          case 18: {
+            SinceTimeMs = input.ReadBytes();
             break;
           }
           case 25: {
